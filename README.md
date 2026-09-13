@@ -85,6 +85,43 @@ Si una actualización cambia el kernel, hay que copiar el nuevo kernel y su init
 
 `sync-kernel.sh` mantiene los archivos externos alineados con los módulos del disco.
 
+## Preparar y probar un servidor Debian/Ubuntu recién instalado
+
+Como root (o usando sudo para instalar paquetes):
+
+```sh
+apt-get update
+apt-get install -y --no-install-recommends git ca-certificates
+git clone https://github.com/bunxdev/qemu-debian-arm.git
+cd qemu-debian-arm
+./debian-setup.sh
+./run-tests.sh
+```
+
+`debian-setup.sh` instala las herramientas ausentes y descarga la Release v0.1.1 en `./vm`.
+No inicia la VM ni sobrescribe un destino existente. `download-vm.sh` verifica el SHA256
+fijado en el código antes de extraer; puede usarse directamente si QEMU y las herramientas ya están instalados.
+Estos scripts están en el repositorio; no hay que volver a descargar una imagen diferente de Debian.
+
+`run-tests.sh` arranca una copia **apagada de 1 GiB**, verifica Debian ARM64 sin Docker,
+SSH, DNS, APT y sincronización del kernel; comprueba el rechazo de cambios de tamaño en ejecución,
+apaga, verifica QCOW2, amplía a 2 GiB y comprueba el nuevo arranque y la persistencia.
+Escribe `/root/persistence-proof` dentro del invitado y descarga índices APT.
+Deja la copia de pruebas encendida con 2 GiB; no se ejecuta otra vez sobre esa misma copia ampliada.
+Los registros y el código de salida quedan en `vm/test-logs.*/`.
+Si falla, conserva la VM y los registros para diagnosticarla; no fuerza el apagado.
+
+```sh
+# Entrar después de las pruebas:
+./vm/ssh.sh
+# O preparar otra copia y usar otros puertos:
+./download-vm.sh ./otra-vm
+VM_SSH_PORT=2223 VM_HTTP_PORT=8081 ./run-tests.sh ./otra-vm
+```
+
+`BOOT_TIMEOUT=900` permite hasta 15 minutos por arranque; puede aumentarse para emulación lenta.
+La prueba posterior al formateo del servidor aún está pendiente.
+
 ## Compartir y GitHub
 
 Distribuir el paquete limpio generado durante la construcción. No distribuir una copia que contenga claves, historial o datos personales.

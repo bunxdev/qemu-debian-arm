@@ -1,4 +1,7 @@
 build/
+vm/
+test-logs.*/
+.qemu-debian-download.*/
 *.qcow2
 *.raw
 *.tar.gz
