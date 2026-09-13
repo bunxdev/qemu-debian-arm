@@ -9,8 +9,8 @@ if [ -f qemu.pid ] && kill -0 "$(cat qemu.pid)" 2>/dev/null; then
     echo 'La VM debe estar apagada antes de iniciar esta prueba.' >&2; exit 1
 fi
 disk_bytes() {
-    qemu-img info --output=json disk.qcow2 |
-        sed -n 's/^[[:space:]]*"virtual-size":[[:space:]]*\([0-9]*\).*$/\1/p'
+    LC_ALL=C qemu-img info --output=human disk.qcow2 |
+        sed -n 's/^virtual size:.*(\([0-9][0-9]*\) bytes).*$/\1/p'
 }
 [ "$(disk_bytes)" = 1073741824 ] || { echo 'Usa una copia de pruebas de 1 GiB; esta prueba la ampliará a 2 GiB.' >&2; exit 1; }
 boot_timeout=${BOOT_TIMEOUT:-900}
