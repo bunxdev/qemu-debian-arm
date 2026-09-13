@@ -1,0 +1,15 @@
+build/
+*.qcow2
+*.raw
+*.tar.gz
+*.tar.xz
+kernel
+initramfs
+*.download
+*.next
+id_ed25519*
+known_hosts
+seed/
+*.sock
+*.pid
+*.log
