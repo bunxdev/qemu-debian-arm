@@ -94,3 +94,25 @@ y accedió por HTTPS a Internet terminaron con código 0 (`CONTAINER_NETWORK_OK`
 Los registros del invitado están en `/root/nya-docker-install.log` y
 `/root/docker-retest.log`. La VM de pruebas quedó encendida con Docker instalado;
 la imagen pública distribuida sigue sin Docker. Android/Termux sigue pendiente.
+
+## Validación en Fedora 44 Cloud x86_64
+
+Se instaló QEMU 10.2.2 mediante DNF en un anfitrión Fedora 44 limpio, usando
+`qemu-system-aarch64-core` y `qemu-img`, sin dependencias débiles. Se clonó el
+repositorio y se ejecutaron `download-vm.sh` y `run-tests.sh`.
+
+La imagen v0.1.1 pasó SHA256. La prueba completa terminó con **ALL TESTS PASSED**
+y código **0**: Debian ARM64, SSH, DNS, APT, sincronización del kernel, apagado,
+integridad QCOW2, ampliación de 1 a 2 GiB, rechazo de reducción y persistencia.
+SSH, red y preparación quedaron activos. Registro: `vm/test-logs.m4JVNh/results.log`.
+
+Después se repitió el instalador externo de Docker dentro del invitado, con `curl`
+y certificados instalados previamente y respuesta afirmativa a la confirmación de
+APT. Se reprodujo el error conocido del paquete Scan ausente; el instalador terminó
+con código 0 y el servicio Docker quedó activo. `hello-world` y Alpine ARM64 con
+acceso HTTPS a Internet pasaron: **DOCKER_TEST_PASSED**, **CONTAINER_NETWORK_OK**.
+El disco del invitado quedó con 669 MiB usados y aproximadamente 1,3 GiB libres.
+Registro del anfitrión: `/root/docker-fedora-test.log`.
+
+La VM quedó encendida con Docker. La imagen publicada permanece sin Docker;
+Android/Termux en un dispositivo real sigue pendiente.

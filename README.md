@@ -168,3 +168,22 @@ docker run --rm alpine sh -ec 'uname -m; wget -q -O /dev/null https://example.co
 
 El instalador es externo y puede cambiar; esta documentación describe la versión
 observada durante la prueba, no incorpora Docker a la imagen ni al instalador de QEMU.
+
+## Anfitrión Fedora 44
+
+También se probaron QEMU 10.2.2 y la VM Debian ARM64 en Fedora 44 x86_64.
+Como root en el anfitrión:
+
+```sh
+dnf -y --setopt=install_weak_deps=False install qemu-system-aarch64-core qemu-img git openssh-clients xz tar ca-certificates
+command -v curl
+git clone https://github.com/bunxdev/qemu-debian-arm.git
+cd qemu-debian-arm
+./download-vm.sh
+./run-tests.sh
+```
+
+La instalación probada de Fedora Cloud ya incluía `curl`. Si falta, instala un
+paquete que proporcione ese comando antes de descargar la VM. `debian-setup.sh`
+está destinado a anfitriones Debian/Ubuntu; en Fedora se instalan las dependencias
+con DNF y se usan directamente los scripts de descarga y pruebas.
