@@ -120,7 +120,7 @@ VM_SSH_PORT=2223 VM_HTTP_PORT=8081 ./run-tests.sh ./otra-vm
 ```
 
 `BOOT_TIMEOUT=900` permite hasta 15 minutos por arranque; puede aumentarse para emulación lenta.
-La prueba posterior al formateo del servidor aún está pendiente.
+La instalación y la prueba completa se repitieron satisfactoriamente en un servidor Debian 13 recién formateado; véase `RESULTS.md`.
 
 ## Compartir y GitHub
 

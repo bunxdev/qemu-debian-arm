@@ -42,3 +42,32 @@ apagado, integridad QCOW2, ampliación de 1 a 2 GiB, rechazo de reducción y per
 SSH, red y preparación quedaron activos, sin unidades fallidas.
 El invitado informó 41 MiB de RAM usados y 436 MiB disponibles en la comprobación final.
 Esta prueba adicional también usa Linux; Android/Termux sigue pendiente de probar.
+
+## Repetición desde un servidor recién formateado — 2026-09-13
+
+Anfitrión Debian 13 x86_64 sin QEMU ni proyecto preinstalados. Se clonó el
+repositorio público y se ejecutaron `debian-setup.sh` y `run-tests.sh` sobre
+la Release v0.1.1, cuyo SHA256 se verificó antes de extraerla.
+
+La primera ejecución detectó un fallo en el lector de tamaño del script de pruebas:
+la salida JSON de QEMU 10 incluye tamaños de imágenes hijas además del disco virtual.
+El commit `6eaece0` corrige la lectura usando la línea de capacidad de la salida
+humana con `LC_ALL=C`. Se descargó esta corrección desde GitHub y se repitió
+la prueba sobre la copia intacta de 1 GiB.
+
+Resultado: **ALL TESTS PASSED**, código de salida **0**.
+
+- Debian 12, ARM64 (`aarch64`), QEMU y ausencia de Docker: correctos.
+- SSH, DNS y actualización de índices APT: correctos.
+- Sincronización de kernel e initramfs: hashes idénticos.
+- Rechazo de ampliación en ejecución, apagado e integridad QCOW2: correctos.
+- Ampliación de 1 a 2 GiB y rechazo de reducción: correctos.
+- Nuevo arranque, crecimiento de ext4 y persistencia del archivo de prueba: correctos.
+- SSH, red y preparación activos, sin unidades fallidas.
+- Disco final: 2,0 GiB, 272 MiB usados y aproximadamente 1,7 GiB disponibles.
+- RAM del invitado: 42 MiB usados y 436 MiB disponibles en la comprobación final.
+- `dpkg --audit` del anfitrión no informó problemas.
+
+La VM de pruebas quedó encendida en `/root/qemu-debian-arm/vm`.
+El registro completo quedó en `vm/test-logs.c8VXzH/results.log`, con su estado
+numérico en `exit-code`. Esta validación no sustituye la prueba pendiente en Android/Termux.
