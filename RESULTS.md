@@ -28,3 +28,17 @@ sobre una copia de pruebas. La imagen que se distribuye está limpia y conserva
 Los tiempos de arranque de este anfitrión se midieron en minutos. El rendimiento
 en un teléfono tendrá que medirse allí. Para tolerar la emulación lenta, systemd
 usa tiempos de inicio y detección de dispositivos de 300 segundos.
+
+## Validación adicional en Debian 13 x86_64
+
+La descarga pública de v0.1.0 coincidió con su SHA256. QEMU 10.0.13 instalado
+sin paquetes recomendados expuso una dependencia de la ROM PXE `efi-virtio.rom`.
+Se corrigió con `romfile=` en la tarjeta virtio-net; el arranque directo no necesita PXE.
+La corrección se incluye en v0.1.1.
+
+Con 512 MiB de RAM y una CPU virtual pasaron: arranque, SSH, identificación QEMU,
+Debian 12 ARM64 sin Docker, resolución DNS, actualización de índices APT desde Internet,
+apagado, integridad QCOW2, ampliación de 1 a 2 GiB, rechazo de reducción y persistencia.
+SSH, red y preparación quedaron activos, sin unidades fallidas.
+El invitado informó 41 MiB de RAM usados y 436 MiB disponibles en la comprobación final.
+Esta prueba adicional también usa Linux; Android/Termux sigue pendiente de probar.

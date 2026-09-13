@@ -22,7 +22,7 @@ qemu-system-aarch64 \
     -device virtio-blk-pci,drive=rootdisk \
     -fw_cfg name=opt/vm/ssh-key,file=seed/authorized_keys \
     -netdev "user,id=net,hostfwd=tcp:127.0.0.1:${VM_SSH_PORT:-2222}-:22,hostfwd=tcp:127.0.0.1:${VM_HTTP_PORT:-8080}-:8080" \
-    -device virtio-net-pci,netdev=net -device virtio-rng-pci \
+    -device virtio-net-pci,netdev=net,romfile= -device virtio-rng-pci \
     -display none -monitor none \
     -chardev socket,id=serial,path=serial.sock,server=on,wait=off,logfile=console.log \
     -serial chardev:serial -pidfile qemu.pid -daemonize

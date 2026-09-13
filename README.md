@@ -7,9 +7,7 @@ El disco ext4 ocupa todo el dispositivo virtual, sin particiones; se amplía aut
 
 ## Descargar
 
-[Paquete Debian ARM64 — 97,17 MiB](https://github.com/bunxdev/qemu-debian-arm/releases/download/v0.1.0/debian-arm64-min.tar.xz) · [SHA256SUMS](https://github.com/bunxdev/qemu-debian-arm/releases/download/v0.1.0/SHA256SUMS) · [Resultados de las pruebas](RESULTS.md)
-
-Mientras el repositorio sea privado, necesitas acceso y una sesión de GitHub para descargar los archivos.
+[Paquete Debian ARM64 — ≈97 MiB](https://github.com/bunxdev/qemu-debian-arm/releases/download/v0.1.1/debian-arm64-min.tar.xz) · [SHA256SUMS](https://github.com/bunxdev/qemu-debian-arm/releases/download/v0.1.1/SHA256SUMS) · [Resultados de las pruebas](RESULTS.md)
 
 ## Instalar en Termux
 
@@ -26,6 +24,8 @@ El paquete contiene `disk.qcow2`, `kernel`, `initramfs` y estos scripts.
 Una vez extraído, `./termux-setup.sh` también permite instalar las herramientas de Termux e iniciar la VM.
 Clonar solo el repositorio no descarga esos tres archivos: son parte del paquete de distribución.
 Termux/Android aún necesita una prueba en el dispositivo real. Las pruebas locales usan Linux x86_64 y TCG.
+En Debian/Ubuntu anfitrión: `apt-get install --no-install-recommends qemu-system-arm qemu-utils openssh-client xz-utils`.
+La tarjeta de red virtual tiene desactivada su ROM PXE, que no se necesita para el arranque directo.
 En Alpine Linux anfitrión: `apk add qemu-system-aarch64 qemu-img openssh-client`.
 No hace falta Docker en el anfitrión ni acceso a KVM.
 
