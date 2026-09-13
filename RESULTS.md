@@ -71,3 +71,26 @@ Resultado: **ALL TESTS PASSED**, código de salida **0**.
 La VM de pruebas quedó encendida en `/root/qemu-debian-arm/vm`.
 El registro completo quedó en `vm/test-logs.c8VXzH/results.log`, con su estado
 numérico en `exit-code`. Esta validación no sustituye la prueba pendiente en Android/Termux.
+
+## Nueva instalación en anfitrión Debian 12 y Docker opcional
+
+Se repitió desde un servidor Debian 12 x86_64 recién formateado, sin QEMU ni
+proyecto preinstalados. La descarga pública v0.1.1 pasó SHA256 y los scripts del
+repositorio completaron `ALL TESTS PASSED`, código 0, incluyendo ampliación a
+2 GiB y persistencia. Registro: `vm/test-logs.8tbEsh/results.log`.
+
+Después, dentro del invitado Debian ARM64, se instalaron `curl` y
+`ca-certificates` y se ejecutó desde Bash el comando solicitado:
+
+```bash
+. <(curl -fsSL https://nyaweb.github.io/nya/docker)
+```
+
+El instalador terminó con código 0 tras aceptar la confirmación de APT.
+Se reprodujo el error por nombre de paquete vacío al buscar `docker-scan-plugin`;
+el script continuó. APT completó las dependencias y `dpkg --audit` quedó sin salida.
+Docker quedó activo. `hello-world` y un contenedor Alpine que imprimió `aarch64`
+y accedió por HTTPS a Internet terminaron con código 0 (`CONTAINER_NETWORK_OK`).
+Los registros del invitado están en `/root/nya-docker-install.log` y
+`/root/docker-retest.log`. La VM de pruebas quedó encendida con Docker instalado;
+la imagen pública distribuida sigue sin Docker. Android/Termux sigue pendiente.

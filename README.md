@@ -141,3 +141,30 @@ sha256sum -c SHA256SUMS
 ```
 
 Fuentes: https://www.debian.org/ ; https://www.qemu.org/docs/master/tools/qemu-img.html
+
+## Docker opcional dentro del invitado
+
+La imagen distribuida sigue siendo Debian sin Docker. Docker se probó por separado
+sobre una VM ampliada a 2 GiB: `hello-world` y Alpine ARM64 con acceso a Internet
+funcionaron. Para imágenes y datos adicionales habrá que ampliar más el disco.
+Android/Termux todavía requiere una prueba en un dispositivo real.
+
+El instalador externo `https://nyaweb.github.io/nya/docker` se probó desde Bash,
+como root **dentro de Debian ARM64**, después de instalar `curl` y `ca-certificates`.
+Su sintaxis `. <(...)` requiere Bash. En la prueba instaló Docker 29.8.0, Compose
+y Buildx, pero intentó instalar un `docker-scan-plugin` sin paquete disponible y
+continuó pese al error. Su paso `apt --fix-broken install` solicitó confirmación.
+Por ello, el código de salida del instalador no demuestra por sí solo que todos
+los componentes se hayan instalado correctamente.
+
+Comprobaciones posteriores:
+
+```sh
+systemctl is-active docker
+dpkg --audit
+docker run --rm hello-world
+docker run --rm alpine sh -ec 'uname -m; wget -q -O /dev/null https://example.com'
+```
+
+El instalador es externo y puede cambiar; esta documentación describe la versión
+observada durante la prueba, no incorpora Docker a la imagen ni al instalador de QEMU.
